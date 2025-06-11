@@ -1,5 +1,3 @@
-/// <reference types="vitest" />
-
 import path from 'node:path'
 import Vue from '@vitejs/plugin-vue'
 import UnoCSS from 'unocss/vite'
@@ -9,9 +7,9 @@ import VueMacros from 'unplugin-vue-macros/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
+import RadixVueResolver from 'radix-vue/resolver'
 
 export default defineConfig({
-  base: './',
   server: {
     host: 'localhost',
     port: 8080,
@@ -53,6 +51,9 @@ export default defineConfig({
     }),
     Components({
       dts: true,
+      resolvers: [
+         RadixVueResolver()
+      ]
     }),
     UnoCSS(),
   ],

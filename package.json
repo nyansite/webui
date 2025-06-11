@@ -10,10 +10,12 @@
     "喵站"
   ],
   "scripts": {
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "dep": "taze major -r -I"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.14.1",
-    "eslint": "^9.28.0"
+    "eslint": "^9.28.0",
+    "taze": "^19.1.0"
   }
 }
