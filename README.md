@@ -2,7 +2,9 @@
 
 喵站PC WebUI + 移动端WebUI
 
-## 项目结构规划
+## 项目规划
+
+### 结构
 
 采用多模块Monorepo
 
@@ -12,6 +14,11 @@
     | logic 通用逻辑封装，包含业务逻辑和api请求封装
     | package.json
 ```
+
+### 技术选型
+
+- 框架：Vue + Vite
+- 插件：UnoCSS, VueUse
 
 # Monorepo注意事项
 

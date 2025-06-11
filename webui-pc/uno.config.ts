@@ -2,7 +2,7 @@ import {
   defineConfig,
   presetAttributify,
   presetIcons,
-  presetWind3
+  presetWind3,
 } from 'unocss'
 
 export default defineConfig({
@@ -16,6 +16,6 @@ export default defineConfig({
     presetIcons({
       scale: 1.2,
       warn: true,
-    })
+    }),
   ],
 })
