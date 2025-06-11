@@ -1,11 +1,11 @@
 <script setup lang="ts" generic="T extends any, O extends any">
-import packageJson from "../../package.json"
-
-const viteVersion = packageJson.devDependencies.vite
+import packageJson from '../../package.json'
 
 defineOptions({
   name: 'IndexPage',
 })
+
+const viteVersion = packageJson.devDependencies.vite
 
 const name = ref('')
 
@@ -27,7 +27,9 @@ function go() {
     <p>
       <em text-sm op75>Opinionated Vite starter template, but a superslim version. (*╹▽╹*)</em>
     </p>
-    <h3 op75 m-1>Vite version: {{ viteVersion }}</h3>
+    <h3 op75 m-1>
+      Vite version: {{ viteVersion }}
+    </h3>
 
     <div py-4 />
 

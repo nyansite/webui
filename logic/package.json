@@ -1,0 +1,10 @@
+{
+  "name": "logic",
+  "packageManager": "pnpm@10.12.1",
+  "author": "Vincent-the-gamer",
+  "license": "MIT",
+  "scripts": {},
+  "devDependencies": {
+    "tsx": "^4.19.4"
+  }
+}

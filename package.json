@@ -1,18 +1,19 @@
 {
   "name": "@nyansite/webui",
   "version": "0.1.0",
+  "packageManager": "pnpm@10.12.1",
   "description": "喵站PC Web前端 + 移动端Web",
-  "scripts": {
-    "tsx": "tsx"
-  },
+  "author": "Vincent-the-gamer",
+  "license": "MIT",
   "keywords": [
     "nyansite",
     "喵站"
   ],
-  "author": "Vincent-the-gamer",
-  "license": "MIT",
-  "packageManager": "pnpm@10.12.1",
+  "scripts": {
+    "lint:fix": "eslint . --fix"
+  },
   "devDependencies": {
-    "tsx": "^4.19.4"
+    "@antfu/eslint-config": "^4.14.1",
+    "eslint": "^9.28.0"
   }
 }
