@@ -1,0 +1,18 @@
+{
+  "name": "@nyansite/webui",
+  "version": "0.1.0",
+  "description": "喵站PC Web前端 + 移动端Web",
+  "scripts": {
+    "tsx": "tsx"
+  },
+  "keywords": [
+    "nyansite",
+    "喵站"
+  ],
+  "author": "Vincent-the-gamer",
+  "license": "MIT",
+  "packageManager": "pnpm@10.12.1",
+  "devDependencies": {
+    "tsx": "^4.19.4"
+  }
+}
