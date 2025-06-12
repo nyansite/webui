@@ -19,6 +19,7 @@
 
 - 框架：Vue + Vite
 - 插件：UnoCSS, VueUse
+- 组件库：[PrimeVue](https://github.com/primefaces/primevue)
 
 # Monorepo注意事项
 

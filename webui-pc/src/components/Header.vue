@@ -1,20 +1,31 @@
 <script setup lang="ts">
+const menuItems = ref<Record<string, any>[]>([
+  {
+    label: "主页",
+    icon: 'i-carbon-home'
+  },
 
+])
 </script>
 
 <template>
   <header>
-    <div w-33.3vw h-full flex="~ row items-center">
-      <img src="../assets/logo.png" alt="logo" w-8 ml-2>
-      <h1 font-size-5 w-fit ml-1>
-        Nyansite
-      </h1>
-    </div>
-    <div w-33.3vw h-full />
-    <div w-33.3vw h-full>
-      <div v-if="!isDark" i-carbon-sun class="theme" @click="toggleDark" />
-      <div v-else i-carbon-moon class="theme" @click="toggleDark" />
-    </div>
+    <Menubar class="menubar" :model="menuItems">
+      <template #start>
+        <img src="../assets/logo.png" alt="logo" />
+        <h1>Nyansite</h1>
+      </template>
+
+      <template #end>
+        <div flex="~ items-center justify-center">
+          <InputText placeholder="搜索..." type="text" h-8 w-32 sm:w-auto />
+          <div ml-3>
+            <div v-if="!isDark" i-carbon-sun class="theme" @click="() => toggleDark()" />
+            <div v-else i-carbon-moon class="theme" @click="() => toggleDark()" />
+          </div>
+        </div>
+      </template>
+    </Menubar>
   </header>
 </template>
 
@@ -23,11 +34,18 @@ header {
   position: fixed;
   display: flex;
   align-items: center;
+  justify-items: center;
   width: 100vw;
   height: 3rem;
   background-color: rgb(246, 246, 246);
   border-bottom: 1px solid rgb(202, 202, 202);
   gap: 1rem;
+
+  img {
+    $size: 1.8rem;
+    width: $size;
+    height: $size;
+  }
 }
 
 .dark header {
@@ -35,12 +53,18 @@ header {
   border-bottom: 1px solid rgb(75, 74, 74);
 }
 
+.menubar {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .theme {
   font-size: 1.3rem;
-  position: absolute;
-  right: 7px;
-  top: 10px;
   cursor: pointer;
+  margin: 0;
+  padding: 0;
+
   &:hover {
     color: deeppink;
   }

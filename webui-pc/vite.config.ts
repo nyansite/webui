@@ -8,6 +8,7 @@ import VueMacros from 'unplugin-vue-macros/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
+import { PrimeVueResolver } from '@primevue/auto-import-resolver'
 
 export default defineConfig({
   server: {
@@ -51,6 +52,9 @@ export default defineConfig({
     }),
     Components({
       dts: true,
+      resolvers: [
+        PrimeVueResolver()
+      ]
     }),
     UnoCSS(),
   ],

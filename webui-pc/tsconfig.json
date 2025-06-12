@@ -3,11 +3,10 @@
     "target": "es2016",
     "jsx": "preserve",
     "lib": ["DOM", "ESNext"],
-    "baseUrl": ".",
     "module": "ESNext",
     "moduleResolution": "bundler",
     "paths": {
-      "~/*": ["src/*"]
+      "~/*": ["./src/*"]
     },
     "resolveJsonModule": true,
     "types": [
@@ -23,6 +22,11 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["./typed-router.d.ts"],
+  "include": [
+    "./auto-imports.d.ts",
+    "./typed-router.d.ts",
+    "./components.d.ts",
+    "./shims.d.ts"
+  ],
   "exclude": ["dist", "node_modules"]
 }
