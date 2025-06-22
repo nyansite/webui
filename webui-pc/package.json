@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@primeuix/themes": "^1.1.1",
+    "@primevue/forms": "^4.3.5",
+    "@snackbar/core": "^1.7.0",
     "@vueuse/core": "^13.3.0",
     "primevue": "^4.3.5",
     "vue": "^3.5.16",

@@ -1,8 +1,12 @@
 <script setup lang="ts">
+const router = useRouter()
 const menuItems = ref<Record<string, any>[]>([
   {
     label: "主页",
-    icon: 'i-carbon-home'
+    icon: 'i-carbon-home',
+    command: () => {
+      router.push("/")
+    }
   },
 
 ])
@@ -23,6 +27,7 @@ const menuItems = ref<Record<string, any>[]>([
             <div v-if="!isDark" i-carbon-sun class="theme" @click="() => toggleDark()" />
             <div v-else i-carbon-moon class="theme" @click="() => toggleDark()" />
           </div>
+          <Avatar ml-3 cursor-pointer label="登录" @click="$router.push('/login')"/>
         </div>
       </template>
     </Menubar>
