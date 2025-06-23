@@ -1,11 +1,11 @@
 {
   "name": "logic",
-  "packageManager": "pnpm@10.12.1",
+  "packageManager": "pnpm@10.12.2",
   "author": "Vincent-the-gamer",
   "license": "MIT",
   "scripts": {},
   "devDependencies": {
-    "tsx": "^4.20.1"
+    "tsx": "^4.20.3"
   },
   "dependencies": {
     "axios": "^1.10.0"
