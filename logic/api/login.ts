@@ -1,3 +1,4 @@
+import { emailRegex, validateRegex } from "../regex";
 import { post } from "../request";
 
 /**
@@ -5,6 +6,17 @@ import { post } from "../request";
  */
 
 // 验证是否已注册
-export async function verifyAccount() {
-    const result = await post("/user/verify-account")
+export async function verifyAccount(account: string) {
+    // 校验是邮箱还是用户名
+    const isEmail: boolean = validateRegex(emailRegex, account)
+    const result = await post("/user/verify-account", {
+        username: isEmail ? undefined : account,
+        email: isEmail ? account : undefined
+    }, {
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    })
+
+    return result
 }

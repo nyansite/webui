@@ -45,11 +45,18 @@ pnpm run dep
 
 ## 业务逻辑调试以及单测
 
-- 调试：使用`tsx`直接运行ts文件即可调试业务逻辑。
-  ```shell
-  pnpm run tsx xx/xx.ts
-  ```
-- 单元测试：在logic模块计划集成vitest跑单测
-  ```shell
-  pnpm run test xx/xx.test.ts
-  ```
+### 调试
+
+使用`tsx`直接运行ts文件即可调试业务逻辑。
+
+```shell
+pnpm run tsx xx/xx.ts
+```
+
+### 单元测试
+
+在logic模块的`test`文件夹中写单测代码，利用vitest进行单元测试
+
+```shell
+pnpm run test xx/xx.test.ts
+```

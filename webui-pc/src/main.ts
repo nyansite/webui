@@ -4,6 +4,8 @@ import { routes } from 'vue-router/auto-routes'
 import App from './App.vue'
 import PrimeVue from 'primevue/config'
 import Lara from "@primeuix/themes/lara"
+import ToastService from "primevue/toastservice"
+import { customAxios } from "logic"
 
 import '@unocss/reset/tailwind.css'
 import './styles/main.scss'
@@ -41,4 +43,10 @@ app.use(PrimeVue, {
     }
   }
 })
+
+// 根据开发/生产环境重置接口base url，因为开发环境调https有证书问题：
+customAxios.defaults.baseURL = import.meta.env.VITE_BASE_URL
+
+app.use(ToastService)
+
 app.mount('#app')

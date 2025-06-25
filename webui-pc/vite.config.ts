@@ -14,6 +14,14 @@ export default defineConfig({
   server: {
     host: 'localhost',
     port: 8080,
+    proxy: {
+      '/api': {
+        target: "https://ai-geek.top/api",
+        rewrite: (path) => path.replace(/^\/api/, ''),
+        changeOrigin: true,
+        secure: false // 忽略证书认证
+      }
+    }
   },
   resolve: {
     alias: {
@@ -47,6 +55,7 @@ export default defineConfig({
       dts: true,
       dirs: [
         './src/composables',
+        './src/utils'
       ],
       vueTemplate: true,
     }),
@@ -54,7 +63,11 @@ export default defineConfig({
       dts: true,
       resolvers: [
         PrimeVueResolver()
-      ]
+      ],
+      dirs: [
+        './src/components',
+        './src/pages'
+      ],
     }),
     UnoCSS(),
   ],
