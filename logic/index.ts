@@ -1,3 +1,3 @@
 export * from "./api"
-export * from "./regex"
+export * from "./validate"
 export * from "./request"

@@ -1,8 +1,8 @@
 <template>
     <Toast position="top-right"/>
-    <div class="login">
-        <div class="login-form">
-            <h1>登录</h1>
+    <div class="register">
+        <div class="register-form">
+            <h1>注册</h1>
             <div p-inline-6>
                 <Form v-slot="$form" :initialValue :resolver @submit="onFormSubmit" flex justify-center flex-col gap-4
                     relative p-5>
@@ -12,21 +12,25 @@
                             $form.username.error?.message }}</Message>
                     </div>
                     <div flex flex-col gap-1>
-                        <InputText name="password" type="password" placeholder="密码" />
-                        <Message v-if="$form.password?.invalid" severity="error" size="small" variant="simple">{{
-                            $form.password.error?.message }}</Message>
+                        <InputText name="mail" type="text" placeholder="邮箱" />
+                        <Message v-if="$form.mail?.invalid" severity="error" size="small" variant="simple">{{
+                            $form.mail.error?.message }}</Message>
                     </div>
-                    <Button w-30 m="0 auto" type="submit" severity="success" label="登录" />
+                    <div flex flex-col gap-1>
+                        <InputText name="passwd" type="password" placeholder="密码" />
+                        <Message v-if="$form.passwd?.invalid" severity="error" size="small" variant="simple">{{
+                            $form.passwd.error?.message }}</Message>
+                    </div>
+                   
+                    <Button w-30 m="0 auto" type="submit" severity="success" label="注册" />
                 </Form>
-                <span>忘记密码？</span>
-                <span float-end @click="$router.push('/register')">注册账号</span>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { loginUsernameValidate, passwordValidate, verifyAccount } from 'logic'
+import { verifyAccount, registerUsernameValidate, emailValidate, passwordValidate } from 'logic'
 import { useToast } from 'primevue'
 
 const toast = useToast()
@@ -40,28 +44,33 @@ function showToast(severity: string, summary: string, detail: string) {
     })
 }
 
-// 登录逻辑
+// 注册逻辑
 const initialValue = reactive<Record<string, any>>({
     username: "",
-    password: ""
+    mail: "",
+    passwd: "",
+    code: ""
 })
 const resolver = ({ values }: any) => {
     let errors: Record<string, any> = {}
 
     // 用户名校验
-    const usernameErrors = loginUsernameValidate(values.username, "username")
+    const usernameErrors = registerUsernameValidate(values.username, "username")
+    // 邮箱校验
+    const emailErrors = emailValidate(values.mail, "mail")
     // 密码校验
-    const passwordErrors = passwordValidate(values.password, "password")
-    
+    const passwordErrors = passwordValidate(values.passwd, "passwd")
+
     errors = {
         ...usernameErrors,
+        ...emailErrors,
         ...passwordErrors
     }
 
     return { values, errors }
 }
 
-// 登录表单提交
+// 注册表单提交
 const onFormSubmit = async ({ valid, states }: any) => {
     const { username, password }: any = states
     if (valid) {
@@ -79,28 +88,28 @@ const onFormSubmit = async ({ valid, states }: any) => {
         } else {
             switch (data.error) {
                 case 0:
-                    // 用户未注册
-                    showToast("error", "错误", "用户尚未注册！")
-                    return
+                    // 用户未注册，继续注册流程
+                    break
                 case 1:
                     showToast("error", "错误", "用户名和邮箱字段均不为空！")
                     return
                 case 2:
-                    // 用户已注册，继续登录流程
-                    break
+                    // 用户已注册，阻止注册流程
+                    showToast("error", "错误", "该用户已经注册过啦！请直接去登录！")
+                    return
                 default:
                     break
             }
         }
 
-        // 登录流程
-        console.log("登录")
+        // 注册流程
+        console.log("注册")
     }
 }
 </script>
 
 <style lang="scss" scoped>
-.login {
+.register {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -114,7 +123,7 @@ const onFormSubmit = async ({ valid, states }: any) => {
     color: black;
 }
 
-.login-form {
+.register-form {
     width: 30rem;
     height: fit-content;
     background-color: rgba(255, 255, 255, 0.8);

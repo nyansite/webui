@@ -1,4 +1,4 @@
-import { emailRegex, validateRegex } from "../regex";
+import { emailRegex, validateRegex } from "../validate/regex";
 import { post } from "../request";
 
 /**
