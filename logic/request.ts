@@ -3,6 +3,7 @@ import axios, { AxiosRequestConfig } from "axios"
 export const customAxios = axios.create({
     baseURL: "https://ai-geek.top/api",
     headers: {
+        "Accept": "*/*",
         "Content-Type": "application/x-www-form-urlencoded"
     },
 })

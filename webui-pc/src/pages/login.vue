@@ -1,4 +1,5 @@
 <template>
+    <Toast position="top-right"/>
     <div class="login">
         <div class="login-form">
             <h1>登录</h1>
@@ -27,6 +28,15 @@ import { emailRegex, validateRegex, verifyAccount } from 'logic'
 import { useToast } from 'primevue'
 
 const toast = useToast()
+
+function showErrorToast(summary: string, detail: string) {
+    toast.add({
+        severity: "error",
+        summary,
+        detail,
+        life: 3000
+    })
+}
 
 // 登录逻辑
 const initialValue = reactive<Record<string, any>>({
@@ -65,37 +75,21 @@ const onFormSubmit = async ({ valid, states }: any) => {
         // 这个error是返回值的key，有点那啥，但是不是错误的意思
         const { data, status } = await verifyAccount(username.value)
         if(status !== 200) {
-            toast.add({
-                severity: "error",
-                summary: "错误",
-                detail: "请求错误，错误码: " + status
-            })
+            showErrorToast("错误", "请求错误，错误码: " + status)
             return
         }
 
-        if (!data.error) {
-            toast.add({
-                severity: "error",
-                summary: "错误",
-                detail: "请求错误，未获取到账号状态"
-            })
+        if (data.error === undefined) {
+            showErrorToast("错误", "请求错误，未获取到账号状态")
             return
         } else {
             switch (data.error) {
                 case 0:
                     // 用户未注册
-                    toast.add({
-                        severity: "error",
-                        summary: "错误",
-                        detail: "用户尚未注册！"
-                    })
+                    showErrorToast("错误", "用户尚未注册！")
                     return
                 case 1:
-                    toast.add({
-                        severity: "error",
-                        summary: "错误",
-                        detail: "用户名和邮箱字段均不为空！"
-                    })
+                    showErrorToast("错误", "用户名和邮箱字段均不为空！")
                     return
                 case 2:
                     // 用户已注册，继续登录流程

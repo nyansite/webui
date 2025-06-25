@@ -8,7 +8,6 @@ const menuItems = ref<Record<string, any>[]>([
       router.push("/")
     }
   },
-
 ])
 </script>
 
@@ -45,6 +44,7 @@ header {
   background-color: rgb(246, 246, 246);
   border-bottom: 1px solid rgb(202, 202, 202);
   gap: 1rem;
+  z-index: 5;
 
   img {
     $size: 1.8rem;

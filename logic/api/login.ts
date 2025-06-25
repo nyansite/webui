@@ -10,8 +10,8 @@ export async function verifyAccount(account: string) {
     // 校验是邮箱还是用户名
     const isEmail: boolean = validateRegex(emailRegex, account)
     const result = await post("/user/verify-account", {
-        username: isEmail ? undefined : account,
-        email: isEmail ? account : undefined
+        username: isEmail ? "" : account,
+        email: isEmail ? account : ""
     }, {
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
