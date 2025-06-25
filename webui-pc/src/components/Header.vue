@@ -2,11 +2,11 @@
 const router = useRouter()
 const menuItems = ref<Record<string, any>[]>([
   {
-    label: "主页",
+    label: '主页',
     icon: 'i-carbon-home',
     command: () => {
-      router.push("/")
-    }
+      router.push('/')
+    },
   },
 ])
 </script>
@@ -15,7 +15,7 @@ const menuItems = ref<Record<string, any>[]>([
   <header>
     <Menubar class="menubar" :model="menuItems">
       <template #start>
-        <img src="../assets/logo.png" alt="logo" />
+        <img src="../assets/logo.png" alt="logo">
         <h1>Nyansite</h1>
       </template>
 
@@ -26,7 +26,7 @@ const menuItems = ref<Record<string, any>[]>([
             <div v-if="!isDark" i-carbon-sun class="theme" @click="() => toggleDark()" />
             <div v-else i-carbon-moon class="theme" @click="() => toggleDark()" />
           </div>
-          <Avatar ml-3 cursor-pointer label="登录" @click="$router.push('/login')"/>
+          <Avatar ml-3 cursor-pointer label="登录" @click="$router.push('/login')" />
         </div>
       </template>
     </Menubar>

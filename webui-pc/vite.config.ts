@@ -1,5 +1,6 @@
 /// <reference types="vitest" />
 import path from 'node:path'
+import { PrimeVueResolver } from '@primevue/auto-import-resolver'
 import Vue from '@vitejs/plugin-vue'
 import UnoCSS from 'unocss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -8,7 +9,6 @@ import VueMacros from 'unplugin-vue-macros/vite'
 import { VueRouterAutoImports } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
-import { PrimeVueResolver } from '@primevue/auto-import-resolver'
 
 export default defineConfig({
   server: {
@@ -16,12 +16,12 @@ export default defineConfig({
     port: 8080,
     proxy: {
       '/api': {
-        target: "https://ai-geek.top/api",
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        target: 'https://ai-geek.top/api',
+        rewrite: path => path.replace(/^\/api/, ''),
         changeOrigin: true,
-        secure: false // 忽略证书认证
-      }
-    }
+        secure: false, // 忽略证书认证
+      },
+    },
   },
   resolve: {
     alias: {
@@ -55,18 +55,18 @@ export default defineConfig({
       dts: true,
       dirs: [
         './src/composables',
-        './src/utils'
+        './src/utils',
       ],
       vueTemplate: true,
     }),
     Components({
       dts: true,
       resolvers: [
-        PrimeVueResolver()
+        PrimeVueResolver(),
       ],
       dirs: [
         './src/components',
-        './src/pages'
+        './src/pages',
       ],
     }),
     UnoCSS(),
