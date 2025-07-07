@@ -84,6 +84,7 @@ async function onFormSubmit({ valid, states }: any) {
           p-5 @submit="onFormSubmit"
         >
           <div flex flex-col gap-1>
+            <span>用户名：</span>
             <InputText name="username" type="text" placeholder="用户名" />
             <Message v-if="$form.username?.invalid" severity="error" size="small" variant="simple">
               {{
@@ -91,6 +92,7 @@ async function onFormSubmit({ valid, states }: any) {
             </Message>
           </div>
           <div flex flex-col gap-1>
+            <span>密码：</span>
             <InputText name="password" type="password" placeholder="密码" />
             <Message v-if="$form.password?.invalid" severity="error" size="small" variant="simple">
               {{

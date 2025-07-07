@@ -9,29 +9,29 @@
     "preview": "vite preview --mode prod"
   },
   "dependencies": {
-    "@primeuix/themes": "^1.1.2",
-    "@primevue/forms": "^4.3.5",
-    "@vueuse/core": "^13.4.0",
+    "@primeuix/themes": "^1.2.1",
+    "@primevue/forms": "^4.3.6",
+    "@vueuse/core": "^13.5.0",
     "logic": "link:logic",
-    "primevue": "^4.3.5",
+    "primevue": "^4.3.6",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.354",
-    "@primevue/auto-import-resolver": "^4.3.5",
+    "@iconify/json": "^2.2.356",
+    "@primevue/auto-import-resolver": "^4.3.6",
     "@types/node": "^24.0.10",
-    "@unocss/reset": "^66.3.2",
+    "@unocss/reset": "^66.3.3",
     "@vitejs/plugin-vue": "^6.0.0",
     "sass": "^1.89.2",
     "typescript": "^5.8.3",
-    "unocss": "^66.3.2",
+    "unocss": "^66.3.3",
     "unplugin-auto-import": "^19.3.0",
     "unplugin-vue-components": "^28.8.0",
     "unplugin-vue-macros": "^2.14.5",
     "unplugin-vue-router": "^0.14.0",
-    "vite": "^7.0.0",
+    "vite": "^7.0.2",
     "vitest": "^3.2.4",
-    "vue-tsc": "^2.2.12"
+    "vue-tsc": "^3.0.1"
   }
 }
