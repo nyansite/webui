@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { emailValidate, passwordValidate, registerUsernameValidate, verifyAccount } from 'logic'
+import { emailValidate, getVerifyCode, passwordValidate, registerUser, registerUsernameValidate, verifyAccount } from 'logic'
 import { useToast } from 'primevue'
 
 const toast = useToast()
@@ -19,13 +19,13 @@ function showToast(severity: string, summary: string, detail: string) {
 // 用户名注册 表单初始化
 const usernameModeInitialValue = reactive<Record<string, any>>({
   username: '',
-  passwd: '',
+  password: '',
 })
 
 // 邮箱注册 表单初始化
 const emailModeInitialValue = reactive<Record<string, any>>({
   mail: '',
-  passwd: '',
+  password: '',
   code: ''
 })
 
@@ -36,7 +36,7 @@ function usernameModeResolver({ values }: any) {
   // 用户名校验
   const usernameErrors = registerUsernameValidate(values.username, 'username')
   // 密码校验
-  const passwordErrors = passwordValidate(values.passwd, 'passwd')
+  const passwordErrors = passwordValidate(values.password, 'password')
 
   errors = {
     ...usernameErrors,
@@ -53,7 +53,7 @@ function emailModeResolver({ values }: any) {
   // 邮箱校验
   const emailErrors = emailValidate(values.mail, 'mail')
   // 密码校验
-  const passwordErrors = passwordValidate(values.passwd, 'passwd')
+  const passwordErrors = passwordValidate(values.password, 'password')
 
   errors = {
     ...emailErrors,
@@ -97,7 +97,43 @@ async function usernameModeFormSubmit({ valid, states }: any) {
     }
 
     // 注册流程
-    console.log('注册')
+    const { data: regData, status: regStatus } = await registerUser({
+      username: username.value,
+      mail: '',
+      password: password.value,
+    })
+
+    if (regStatus !== 200) {
+      showToast('error', '错误', `请求错误，错误码: ${regStatus}`)
+      return
+    }
+
+    switch (regData.error) {
+      case 0:
+        showToast('success', '成功', '注册成功！')
+        break
+      case 1:
+        showToast('error', '错误', '该用户已登录！')
+        break
+      case 2:
+        showToast('error', '错误', '用户名或邮箱格式错误，含有敏感字符或已注册!')
+        break
+      case 3:
+        showToast('error', '错误', '密码格式错误或含有敏感字符!')
+        break
+      case 4:
+        showToast('error', '错误', '用户名和邮箱有超过一个非空键!')
+        break
+      case 5:
+        showToast('error', '错误', '验证码不匹配!')
+        break
+      case 6:
+        showToast('error', '错误', '验证码已过期，请重新获取!')
+        break
+      default:
+        showToast('error', '错误', `未知错误，错误码: ${regData.error}`)
+        break
+    }
   }
 }
 
@@ -105,7 +141,7 @@ async function usernameModeFormSubmit({ valid, states }: any) {
 
 // 邮箱注册 表单提交
 async function emailModeFormSubmit({ valid, states }: any) {
-  const { mail, passwd }: any = states
+  const { mail, password, code }: any = states
   if (valid) {
     // 校验用户是否已注册
     // 这个error是返回值的key，有点那啥，但是不是错误的意思
@@ -137,10 +173,77 @@ async function emailModeFormSubmit({ valid, states }: any) {
     }
 
     // 注册流程
-    console.log('注册')
+    const { data: regData, status: regStatus }: any = await registerUser({
+      username: '',
+      mail: mail.value,
+      password: password.value,
+      code: code.value
+    })
+
+    if (regStatus !== 200) {
+      showToast('error', '错误', `请求错误，错误码: ${regStatus}`)
+      return
+    }
+
+    switch (regData.error) {
+      case 0:
+        showToast('success', '成功', '注册成功！')
+        break
+      case 1:
+        showToast('error', '错误', '该用户已登录！')
+        break
+      case 2:
+        showToast('error', '错误', '用户名或邮箱格式错误，含有敏感字符或已注册!')
+        break
+      case 3:
+        showToast('error', '错误', '密码格式错误或含有敏感字符!')
+        break
+      case 4:
+        showToast('error', '错误', '用户名和邮箱有超过一个非空键!')
+        break
+      case 5:
+        showToast('error', '错误', '验证码不匹配!')
+        break
+      case 6:
+        showToast('error', '错误', '验证码已过期，请重新获取!')
+        break
+      default:
+        showToast('error', '错误', `未知错误，错误码: ${regData.error}`)
+        break
+    }
   }
 }
 
+// 获取验证码
+const getEmailCodeLabel = ref<string>('获取验证码')
+const disableEmailCodeButton = ref<boolean>(false)
+let emailCodeTimer: number | null = null
+let countdown = 60
+
+async function getEmailCode(mail: string) {
+  if (disableEmailCodeButton.value) return
+  disableEmailCodeButton.value = true
+  countdown = 60
+  getEmailCodeLabel.value = `重新获取(${countdown}s)`
+
+  // 启动倒计时
+  emailCodeTimer && clearInterval(emailCodeTimer)
+  emailCodeTimer = setInterval(() => {
+    countdown--
+    if (countdown > 0) {
+      getEmailCodeLabel.value = `重新获取(${countdown}s)`
+    } else {
+      getEmailCodeLabel.value = '获取验证码'
+      disableEmailCodeButton.value = false
+      if (emailCodeTimer) {
+        clearInterval(emailCodeTimer)
+        emailCodeTimer = null
+      }
+    }
+  }, 1000)
+
+  await getVerifyCode(mail)
+}
 
 </script>
 
@@ -170,10 +273,10 @@ async function emailModeFormSubmit({ valid, states }: any) {
           </div>
           <div flex flex-col gap-1>
             <span>密码：</span>
-            <InputText name="passwd" type="password" placeholder="密码" />
-            <Message v-if="$form.passwd?.invalid" severity="error" size="small" variant="simple">
+            <InputText name="password" type="password" placeholder="密码" />
+            <Message v-if="$form.password?.invalid" severity="error" size="small" variant="simple">
               {{
-                $form.passwd.error?.message }}
+                $form.password.error?.message }}
             </Message>
           </div>
 
@@ -189,28 +292,30 @@ async function emailModeFormSubmit({ valid, states }: any) {
             <span>邮箱：</span>
             <InputText name="mail" type="text" placeholder="邮箱" />
             <Message v-if="$form.mail?.invalid" severity="error" size="small" variant="simple">
-              {{
-                $form.mail.error?.message }}
+              {{ $form.mail.error?.message }}
             </Message>
           </div>
           <div flex flex-col gap-1>
             <span>密码：</span>
-            <InputText name="passwd" type="password" placeholder="密码" />
-            <Message v-if="$form.passwd?.invalid" severity="error" size="small" variant="simple">
-              {{
-                $form.passwd.error?.message }}
+            <InputText name="password" type="password" placeholder="密码" />
+            <Message v-if="$form.password?.invalid" severity="error" size="small" variant="simple">
+              {{ $form.password.error?.message }}
             </Message>
           </div>
           <div flex flex-col gap-1>
             <span>验证码：</span>
             <InputText name="code" type="text" placeholder="验证码" />
             <Message v-if="$form.code?.invalid" severity="error" size="small" variant="simple">
-              {{
-                $form.code.error?.message }}
+              {{ $form.code.error?.message }}
             </Message>
           </div>
 
-          <Button w-30 m="0 auto" type="submit" severity="success" label="注册" />
+          <div flex="~ row">
+            <Button w-30 m="0 auto" type="submit" severity="success" label="注册" />
+            <Button w-fit m="0 auto" type="button" severity="secondary" :label="getEmailCodeLabel" :disabled="disableEmailCodeButton"
+              @click="getEmailCode(emailModeInitialValue.mail)" />
+          </div>
+
         </Form>
       </div>
     </div>

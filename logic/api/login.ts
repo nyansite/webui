@@ -12,10 +12,39 @@ export async function verifyAccount(account: string) {
   const result = await post('/user/verify-account', {
     username: isEmail ? '' : account,
     email: isEmail ? account : '',
-  }, {
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
+  })
+
+  return result
+}
+
+// 发送验证码
+export async function getVerifyCode(email: string) {
+  // 校验邮箱格式
+  if (!validateRegex(emailRegex, email)) {
+    throw new Error('Invalid email format')
+  }
+
+  const result = await post('/user/request-email-code', { email })
+  return result
+}
+
+
+// 注册用户
+export interface RegisterUserParams {
+  username?: string
+  password: string
+  mail?: string
+  code?: string
+}
+
+export async function registerUser(params: RegisterUserParams) {
+  const { username, password, mail, code } = params
+
+  const result = await post('/user/signup', {
+    username,
+    password,
+    mail,
+    code
   })
 
   return result
