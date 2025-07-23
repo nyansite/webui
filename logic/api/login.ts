@@ -19,11 +19,6 @@ export async function verifyAccount(account: string) {
 
 // 发送验证码
 export async function getVerifyCode(email: string) {
-  // 校验邮箱格式
-  if (!validateRegex(emailRegex, email)) {
-    throw new Error('Invalid email format')
-  }
-
   const result = await post('/user/request-email-code', { email })
   return result
 }

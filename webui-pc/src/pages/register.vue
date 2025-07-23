@@ -313,7 +313,7 @@ async function getEmailCode(mail: string) {
           <div flex="~ row">
             <Button w-30 m="0 auto" type="submit" severity="success" label="注册" />
             <Button w-fit m="0 auto" type="button" severity="secondary" :label="getEmailCodeLabel" :disabled="disableEmailCodeButton"
-              @click="getEmailCode(emailModeInitialValue.mail)" />
+              @click="getEmailCode($form.mail?.value)" />
           </div>
 
         </Form>
