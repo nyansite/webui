@@ -131,6 +131,11 @@ async function onFormSubmit({ valid, states }: any) {
   padding-bottom: 18px;
 }
 
+.dark .login-form {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
 h1 {
   font-size: 30px;
   width: fit-content;

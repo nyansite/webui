@@ -15,18 +15,18 @@ const menuItems = ref<Record<string, any>[]>([
   <header>
     <Menubar class="menubar" :model="menuItems">
       <template #start>
-        <img src="../assets/logo.png" alt="logo">
+        <img src="../assets/logo.png" alt="logo" mr-2>
         <h1>Nyansite</h1>
       </template>
 
       <template #end>
         <div flex="~ items-center justify-center">
           <InputText placeholder="搜索..." type="text" h-8 w-32 sm:w-auto />
-          <div ml-3>
+          <div ml-3 mr-2>
             <div v-if="!isDark" i-carbon-sun class="theme" @click="() => toggleDark()" />
             <div v-else i-carbon-moon class="theme" @click="() => toggleDark()" />
           </div>
-          <Avatar ml-3 cursor-pointer label="登录" @click="$router.push('/login')" />
+          <Avatar cursor-pointer label="登录" @click="$router.push('/login')" />
         </div>
       </template>
     </Menubar>

@@ -2,7 +2,9 @@
 import { emailValidate, getVerifyCode, passwordValidate, registerUser, registerUsernameValidate, verifyAccount } from 'logic'
 import { useToast } from 'primevue'
 
+const router = useRouter()
 const toast = useToast()
+const isSubmitting = ref<boolean>(false)
 
 // 切换用户名注册还是邮箱注册
 const registerMode = ref<string>("用户名注册")
@@ -97,10 +99,12 @@ async function usernameModeFormSubmit({ valid, states }: any) {
     }
 
     // 注册流程
+    isSubmitting.value = true
     const { data: regData, status: regStatus } = await registerUser({
       username: username.value,
       mail: '',
       password: password.value,
+      code: '',
     })
 
     if (regStatus !== 200) {
@@ -110,7 +114,10 @@ async function usernameModeFormSubmit({ valid, states }: any) {
 
     switch (regData.error) {
       case 0:
-        showToast('success', '成功', '注册成功！')
+        showToast('success', '成功', '注册成功，3s后即将跳转到登录页面！')
+        setTimeout(() => {
+          router.push('/login')
+        }, 3000)
         break
       case 1:
         showToast('error', '错误', '该用户已登录！')
@@ -134,6 +141,8 @@ async function usernameModeFormSubmit({ valid, states }: any) {
         showToast('error', '错误', `未知错误，错误码: ${regData.error}`)
         break
     }
+
+    isSubmitting.value = false
   }
 }
 
@@ -173,6 +182,7 @@ async function emailModeFormSubmit({ valid, states }: any) {
     }
 
     // 注册流程
+    isSubmitting.value = true
     const { data: regData, status: regStatus }: any = await registerUser({
       username: '',
       mail: mail.value,
@@ -211,6 +221,8 @@ async function emailModeFormSubmit({ valid, states }: any) {
         showToast('error', '错误', `未知错误，错误码: ${regData.error}`)
         break
     }
+
+    isSubmitting.value = false
   }
 }
 
@@ -273,14 +285,20 @@ async function getEmailCode(mail: string) {
           </div>
           <div flex flex-col gap-1>
             <span>密码：</span>
-            <InputText name="password" type="password" placeholder="密码" />
+            <Password name="password" 
+                      placeholder="密码"
+                      toggle-mask 
+                      prompt-label="密码强度"
+                      weak-label="这么弱！？"
+                      medium-label="中等"
+                      strong-label="这么强！？" />
             <Message v-if="$form.password?.invalid" severity="error" size="small" variant="simple">
               {{
                 $form.password.error?.message }}
             </Message>
           </div>
 
-          <Button w-30 m="0 auto" type="submit" severity="success" label="注册" />
+          <Button w-30 m="0 auto" type="submit" :loading="isSubmitting" severity="success" label="注册" />
         </Form>
       </div>
 
@@ -297,7 +315,13 @@ async function getEmailCode(mail: string) {
           </div>
           <div flex flex-col gap-1>
             <span>密码：</span>
-            <InputText name="password" type="password" placeholder="密码" />
+            <Password name="password" 
+                      placeholder="密码"
+                      toggle-mask 
+                      prompt-label="密码强度"
+                      weak-label="这么弱！？"
+                      medium-label="中等"
+                      strong-label="这么强！？" />
             <Message v-if="$form.password?.invalid" severity="error" size="small" variant="simple">
               {{ $form.password.error?.message }}
             </Message>
@@ -311,7 +335,7 @@ async function getEmailCode(mail: string) {
           </div>
 
           <div flex="~ row">
-            <Button w-30 m="0 auto" type="submit" severity="success" label="注册" />
+            <Button w-30 m="0 auto" type="submit" severity="success" :loading="isSubmitting" label="注册" />
             <Button w-fit m="0 auto" type="button" severity="secondary" :label="getEmailCodeLabel" :disabled="disableEmailCodeButton"
               @click="getEmailCode($form.mail?.value)" />
           </div>
@@ -345,6 +369,11 @@ async function getEmailCode(mail: string) {
   padding-bottom: 18px;
 }
 
+.dark .register-form {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
 h1 {
   font-size: 30px;
   width: fit-content;
@@ -358,5 +387,9 @@ span {
   &:hover {
     color: deeppink;
   }
+}
+
+:deep(.p-inputtext) {
+  width: 100%;
 }
 </style>
