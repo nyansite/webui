@@ -44,3 +44,22 @@ export async function registerUser(params: RegisterUserParams) {
 
   return result
 }
+
+// 用户登录
+export interface LoginParams {
+  username?: string
+  password: string
+  email?: string
+}
+
+export async function userLogin(params: LoginParams) {
+  const { username, password, email } = params
+
+  const result = await post('/user/login', {
+    username,
+    password,
+    email
+  })
+
+  return result
+}

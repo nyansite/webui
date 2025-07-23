@@ -9,6 +9,12 @@ const isSubmitting = ref<boolean>(false)
 // 切换用户名注册还是邮箱注册
 const registerMode = ref<string>("用户名注册")
 
+watch(() => registerMode.value, (newMode) => {
+  if (!['用户名注册', '邮箱注册'].includes(newMode)) {
+    registerMode.value = '用户名注册' // 如果模式不在预设范围内，重置为默认
+  }
+})
+
 function showToast(severity: string, summary: string, detail: string) {
   toast.add({
     severity,
@@ -67,6 +73,7 @@ function emailModeResolver({ values }: any) {
 
 // 用户名注册 表单提交
 async function usernameModeFormSubmit({ valid, states }: any) {
+  isSubmitting.value = true
   const { username, password }: any = states
   if (valid) {
     // 校验用户是否已注册
@@ -99,7 +106,6 @@ async function usernameModeFormSubmit({ valid, states }: any) {
     }
 
     // 注册流程
-    isSubmitting.value = true
     const { data: regData, status: regStatus } = await registerUser({
       username: username.value,
       mail: '',
@@ -150,6 +156,7 @@ async function usernameModeFormSubmit({ valid, states }: any) {
 
 // 邮箱注册 表单提交
 async function emailModeFormSubmit({ valid, states }: any) {
+  isSubmitting.value = true
   const { mail, password, code }: any = states
   if (valid) {
     // 校验用户是否已注册
@@ -182,7 +189,6 @@ async function emailModeFormSubmit({ valid, states }: any) {
     }
 
     // 注册流程
-    isSubmitting.value = true
     const { data: regData, status: regStatus }: any = await registerUser({
       username: '',
       mail: mail.value,
@@ -285,13 +291,12 @@ async function getEmailCode(mail: string) {
           </div>
           <div flex flex-col gap-1>
             <span>密码：</span>
-            <Password name="password" 
-                      placeholder="密码"
-                      toggle-mask 
-                      prompt-label="密码强度"
-                      weak-label="这么弱！？"
-                      medium-label="中等"
-                      strong-label="这么强！？" />
+            <Password name="password" placeholder="密码" toggle-mask prompt-label="无" weak-label="这么弱！？"
+              medium-label="中等" strong-label="这么强！？">
+              <template #header>
+                <div class="font-semibold text-xm mb-4">密码强度</div>
+              </template>
+            </Password>
             <Message v-if="$form.password?.invalid" severity="error" size="small" variant="simple">
               {{
                 $form.password.error?.message }}
@@ -315,13 +320,12 @@ async function getEmailCode(mail: string) {
           </div>
           <div flex flex-col gap-1>
             <span>密码：</span>
-            <Password name="password" 
-                      placeholder="密码"
-                      toggle-mask 
-                      prompt-label="密码强度"
-                      weak-label="这么弱！？"
-                      medium-label="中等"
-                      strong-label="这么强！？" />
+            <Password name="password" placeholder="密码" toggle-mask prompt-label="无" weak-label="这么弱！？" medium-label="中等"
+              strong-label="这么强！？">
+              <template #header>
+                <div class="font-semibold text-xm mb-4">密码强度</div>
+              </template>
+            </Password>
             <Message v-if="$form.password?.invalid" severity="error" size="small" variant="simple">
               {{ $form.password.error?.message }}
             </Message>
@@ -336,8 +340,8 @@ async function getEmailCode(mail: string) {
 
           <div flex="~ row">
             <Button w-30 m="0 auto" type="submit" severity="success" :loading="isSubmitting" label="注册" />
-            <Button w-fit m="0 auto" type="button" severity="secondary" :label="getEmailCodeLabel" :disabled="disableEmailCodeButton"
-              @click="getEmailCode($form.mail?.value)" />
+            <Button w-fit m="0 auto" type="button" severity="secondary" :label="getEmailCodeLabel"
+              :disabled="disableEmailCodeButton" @click="getEmailCode($form.mail?.value)" />
           </div>
 
         </Form>
