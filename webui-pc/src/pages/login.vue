@@ -7,6 +7,7 @@ const loginMode = ref<string>('用户名登录') // 登录模式，默认为用�
 const loading = ref<boolean>(false)
 
 watch(() => loginMode.value, (newMode) => {
+  loading.value = false
   if(!['用户名登录', '邮箱登录'].includes(newMode)) {
     loginMode.value = '用户名登录' // 如果模式不在预设范围内，重置为默认
   }
@@ -37,10 +38,18 @@ function resolver({ values }: any) {
   // 密码校验
   const passwordErrors = passwordValidate(values.password, 'password')
 
-  errors = {
-    ...usernameErrors,
-    ...emailErrors,
-    ...passwordErrors,
+  if(loginMode.value === '用户名登录') {
+    // 如果是用户名登录，校验用户名
+    errors = {
+      ...usernameErrors,
+      ...passwordErrors
+    }
+  } else if (loginMode.value === '邮箱登录') {
+    // 如果是邮箱登录，校验邮箱
+    errors = {
+      ...emailErrors,
+      ...passwordErrors
+    }
   }
 
   return { values, errors }
@@ -50,10 +59,13 @@ function resolver({ values }: any) {
 async function onFormSubmit({ valid, states }: any) {
   loading.value = true
   const { username, password, email }: any = states
+  
   if (valid) {
     // 校验用户是否已注册
     // 这个error是返回值的key，有点那啥，但是不是错误的意思
-    const { data, status } = await verifyAccount(username.value)
+    const account = loginMode.value === '用户名登录' ? username.value : email.value
+
+    const { data, status } = await verifyAccount(account)
     if (status !== 200) {
       showToast('error', '错误', `请求错误，错误码: ${status}`)
       return
@@ -81,6 +93,12 @@ async function onFormSubmit({ valid, states }: any) {
     }
 
     // 登录流程
+    if(loginMode.value === '用户名登录') {
+      email.value = '' // 如果是用户名登录，清空邮箱字段
+    } else {
+      username.value = '' // 如果是邮箱登录，清空用户名字段
+    }
+
     const { data: loginData, status: loginStatus } = await userLogin({
       username: username ? username.value : '',
       password: password.value,
@@ -113,6 +131,12 @@ async function onFormSubmit({ valid, states }: any) {
         showToast('error', '错误', '未知错误！')
     }
 
+    // 登录完成后，调接口获取用户数据，保存在store中
+
+    loading.value = false
+  } else {
+    // 如果表单验证不通过，显示错误信息
+    showToast('error', '错误', '表单验证未通过！')
     loading.value = false
   }
 }
@@ -123,7 +147,6 @@ async function onFormSubmit({ valid, states }: any) {
   <div class="login">
     <div class="login-form">
       <h1>登录</h1>
-
        <div m="0 auto" w-fit>
         <SelectButton size="small" :options="['用户名登录', '邮箱登录']" v-model="loginMode" />
       </div>

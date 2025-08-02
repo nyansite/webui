@@ -9,6 +9,10 @@ const menuItems = ref<Record<string, any>[]>([
     },
   },
 ])
+
+const userStore = useUserStore()
+
+const isLogin = ref<boolean>(userStore.userid !== -1)
 </script>
 
 <template>
@@ -26,7 +30,10 @@ const menuItems = ref<Record<string, any>[]>([
             <div v-if="!isDark" i-carbon-sun class="theme" @click="() => toggleDark()" />
             <div v-else i-carbon-moon class="theme" @click="() => toggleDark()" />
           </div>
-          <Avatar cursor-pointer label="登录" @click="$router.push('/login')" />
+          <Avatar v-if="!isLogin" cursor-pointer label="登录" aria-haspopup="true" aria-controls="not-login"
+                 @click="$router.push('/login')" />
+          <Avatar v-else cursor-pointer label="已经登录" aria-haspopup="true" aria-controls="logged-in"
+                  />
         </div>
       </template>
     </Menubar>
