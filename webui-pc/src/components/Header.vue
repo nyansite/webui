@@ -1,5 +1,12 @@
 <script setup lang="ts">
+import { userLogout } from 'logic'
+import { useToast } from 'primevue'
+
 const router = useRouter()
+const userStore = useUserStore()
+const toast = useToast()
+
+// Header左边的菜单
 const menuItems = ref<Record<string, any>[]>([
   {
     label: '主页',
@@ -10,13 +17,63 @@ const menuItems = ref<Record<string, any>[]>([
   },
 ])
 
-const userStore = useUserStore()
 
-const isLogin = ref<boolean>(userStore.userid !== -1)
+// 登录按钮弹出菜单
+const loginMenu = ref<any>(null)
+const loginPopupMenu = ref<Record<string, any>[]>([
+  {
+    label: '个人中心',
+    icon: 'i-carbon-user',
+    command: () => {
+      router.push('/user')
+    },
+  },
+  {
+    label: '设置',
+    icon: 'i-carbon-settings',
+    command: () => {
+      router.push('/settings')
+    },
+  },
+  {
+    separator: true
+  },
+  {
+    label: '登出',
+    icon: 'i-carbon-logout',
+    command: async () => {
+      const { data, status } = await userLogout()
+      if(status === 200) {
+        if(data.error !== 0) {
+          showToast(toast, 'error', '错误', `登出失败，用户未登录！`)
+          return
+        } else {
+          showToast(toast, 'success', '成功', '登出成功')
+          userStore.clearUserData()
+          router.push('/')
+        }
+      } else {
+        showToast(toast, 'error', '错误', `登出请求失败，错误码: ${status}`)
+      }
+    },
+  },
+])
+
+const toggle = (event: Event) => {
+  loginMenu.value!.toggle(event)
+}
+
+const isLogin = ref<boolean>(userStore.id !== '')
+
+// 监听登录状态的变化
+watch(() => userStore.id, (newId) => {
+  isLogin.value = newId !== ''
+})
 </script>
 
 <template>
   <header>
+    <Toast position="top-right" />
     <Menubar class="menubar" :model="menuItems">
       <template #start>
         <img src="../assets/logo.png" alt="logo" mr-2>
@@ -30,10 +87,21 @@ const isLogin = ref<boolean>(userStore.userid !== -1)
             <div v-if="!isDark" i-carbon-sun class="theme" @click="() => toggleDark()" />
             <div v-else i-carbon-moon class="theme" @click="() => toggleDark()" />
           </div>
-          <Avatar v-if="!isLogin" cursor-pointer label="登录" aria-haspopup="true" aria-controls="not-login"
+          <Avatar v-if="!isLogin" cursor-pointer label="登录" aria-haspopup="false"
                  @click="$router.push('/login')" />
-          <Avatar v-else cursor-pointer label="已经登录" aria-haspopup="true" aria-controls="logged-in"
-                  />
+          <Avatar v-else cursor-pointer :image="userStore.avatar" aria-haspopup="true" aria-controls="logged-in"
+                  @click="toggle"/>
+          <Menu ref="loginMenu" id="overlay_menu" :model="loginPopupMenu" :popup="true">
+            <template #end>
+                <button v-ripple class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
+                    <Avatar :image="userStore.avatar" class="mr-2" shape="circle" />
+                    <span class="inline-flex flex-col items-start">
+                        <span class="font-bold">{{ userStore.username }}</span>
+                        <span class="text-sm">Level: {{ userStore.level }}</span>
+                    </span>
+                </button>
+            </template>
+          </Menu>
         </div>
       </template>
     </Menubar>

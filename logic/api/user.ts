@@ -2,7 +2,7 @@ import { post } from '../request'
 import { emailRegex, validateRegex } from '../validate/regex'
 
 /**
- * 用户登录模块相关接口
+ * 用户模块相关接口，包含注册，登录等
  */
 
 // 验证是否已注册
@@ -19,8 +19,7 @@ export async function verifyAccount(account: string) {
 
 // 发送验证码
 export async function getVerifyCode(email: string) {
-  const result = await post('/user/request-email-code', { email })
-  return result
+  return await post('/user/request-email-code', { email })
 }
 
 
@@ -62,4 +61,14 @@ export async function userLogin(params: LoginParams) {
   })
 
   return result
+}
+
+// 获取已登录用户自身的信息
+export async function getOwnInfo() {
+  return await post('/user/get-own-info')
+}
+
+// 用户登出
+export async function userLogout() {
+  return await post('/user/logout')
 }

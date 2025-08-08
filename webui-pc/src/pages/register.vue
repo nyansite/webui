@@ -2,8 +2,8 @@
 import { emailValidate, getVerifyCode, passwordValidate, registerUser, registerUsernameValidate, verifyAccount } from 'logic'
 import { useToast } from 'primevue'
 
-const router = useRouter()
 const toast = useToast()
+const router = useRouter()
 const isSubmitting = ref<boolean>(false)
 
 // 切换用户名注册还是邮箱注册
@@ -14,15 +14,6 @@ watch(() => registerMode.value, (newMode) => {
     registerMode.value = '用户名注册' // 如果模式不在预设范围内，重置为默认
   }
 })
-
-function showToast(severity: string, summary: string, detail: string) {
-  toast.add({
-    severity,
-    summary,
-    detail,
-    life: 3000,
-  })
-}
 
 // 用户名注册 表单初始化
 const usernameModeInitialValue = reactive<Record<string, any>>({
@@ -80,12 +71,12 @@ async function usernameModeFormSubmit({ valid, states }: any) {
     // 这个error是返回值的key，有点那啥，但是不是错误的意思
     const { data, status } = await verifyAccount(username.value)
     if (status !== 200) {
-      showToast('error', '错误', `请求错误，错误码: ${status}`)
+      showToast(toast, 'error', '错误', `请求错误，错误码: ${status}`)
       return
     }
 
     if (data.error === undefined) {
-      showToast('error', '错误', '请求错误，未获取到账号状态')
+      showToast(toast, 'error', '错误', '请求错误，未获取到账号状态')
       return
     }
     else {
@@ -94,11 +85,11 @@ async function usernameModeFormSubmit({ valid, states }: any) {
           // 用户未注册，继续注册流程
           break
         case 1:
-          showToast('error', '错误', '用户名和邮箱字段均不为空！')
+          showToast(toast, 'error', '错误', '用户名和邮箱字段均不为空！')
           return
         case 2:
           // 用户已注册，阻止注册流程
-          showToast('error', '错误', '该用户已经注册过啦！请直接去登录！')
+          showToast(toast, 'error', '错误', '该用户已经注册过啦！请直接去登录！')
           return
         default:
           break
@@ -114,37 +105,37 @@ async function usernameModeFormSubmit({ valid, states }: any) {
     })
 
     if (regStatus !== 200) {
-      showToast('error', '错误', `请求错误，错误码: ${regStatus}`)
+      showToast(toast, 'error', '错误', `请求错误，错误码: ${regStatus}`)
       return
     }
 
     switch (regData.error) {
       case 0:
-        showToast('success', '成功', '注册成功，3s后即将跳转到登录页面！')
+        showToast(toast, 'success', '成功', '注册成功，3s后即将跳转到登录页面！')
         setTimeout(() => {
           router.push('/login')
         }, 3000)
         break
       case 1:
-        showToast('error', '错误', '该用户已登录！')
+        showToast(toast, 'error', '错误', '该用户已登录！')
         break
       case 2:
-        showToast('error', '错误', '用户名或邮箱格式错误，含有敏感字符或已注册!')
+        showToast(toast, 'error', '错误', '用户名或邮箱格式错误，含有敏感字符或已注册!')
         break
       case 3:
-        showToast('error', '错误', '密码格式错误或含有敏感字符!')
+        showToast(toast, 'error', '错误', '密码格式错误或含有敏感字符!')
         break
       case 4:
-        showToast('error', '错误', '用户名和邮箱有超过一个非空键!')
+        showToast(toast, 'error', '错误', '用户名和邮箱有超过一个非空键!')
         break
       case 5:
-        showToast('error', '错误', '验证码不匹配!')
+        showToast(toast, 'error', '错误', '验证码不匹配!')
         break
       case 6:
-        showToast('error', '错误', '验证码已过期，请重新获取!')
+        showToast(toast, 'error', '错误', '验证码已过期，请重新获取!')
         break
       default:
-        showToast('error', '错误', `未知错误，错误码: ${regData.error}`)
+        showToast(toast, 'error', '错误', `未知错误，错误码: ${regData.error}`)
         break
     }
 
@@ -163,12 +154,12 @@ async function emailModeFormSubmit({ valid, states }: any) {
     // 这个error是返回值的key，有点那啥，但是不是错误的意思
     const { data, status } = await verifyAccount(mail.value)
     if (status !== 200) {
-      showToast('error', '错误', `请求错误，错误码: ${status}`)
+      showToast(toast, 'error', '错误', `请求错误，错误码: ${status}`)
       return
     }
 
     if (data.error === undefined) {
-      showToast('error', '错误', '请求错误，未获取到账号状态')
+      showToast(toast, 'error', '错误', '请求错误，未获取到账号状态')
       return
     }
     else {
@@ -177,11 +168,11 @@ async function emailModeFormSubmit({ valid, states }: any) {
           // 用户未注册，继续注册流程
           break
         case 1:
-          showToast('error', '错误', '用户名和邮箱字段均不为空！')
+          showToast(toast, 'error', '错误', '用户名和邮箱字段均不为空！')
           return
         case 2:
           // 用户已注册，阻止注册流程
-          showToast('error', '错误', '该用户已经注册过啦！请直接去登录！')
+          showToast(toast, 'error', '错误', '该用户已经注册过啦！请直接去登录！')
           return
         default:
           break
@@ -197,34 +188,34 @@ async function emailModeFormSubmit({ valid, states }: any) {
     })
 
     if (regStatus !== 200) {
-      showToast('error', '错误', `请求错误，错误码: ${regStatus}`)
+      showToast(toast, 'error', '错误', `请求错误，错误码: ${regStatus}`)
       return
     }
 
     switch (regData.error) {
       case 0:
-        showToast('success', '成功', '注册成功！')
+        showToast(toast, 'success', '成功', '注册成功！')
         break
       case 1:
-        showToast('error', '错误', '该用户已登录！')
+        showToast(toast, 'error', '错误', '该用户已登录！')
         break
       case 2:
-        showToast('error', '错误', '用户名或邮箱格式错误，含有敏感字符或已注册!')
+        showToast(toast, 'error', '错误', '用户名或邮箱格式错误，含有敏感字符或已注册!')
         break
       case 3:
-        showToast('error', '错误', '密码格式错误或含有敏感字符!')
+        showToast(toast, 'error', '错误', '密码格式错误或含有敏感字符!')
         break
       case 4:
-        showToast('error', '错误', '用户名和邮箱有超过一个非空键!')
+        showToast(toast, 'error', '错误', '用户名和邮箱有超过一个非空键!')
         break
       case 5:
-        showToast('error', '错误', '验证码不匹配!')
+        showToast(toast, 'error', '错误', '验证码不匹配!')
         break
       case 6:
-        showToast('error', '错误', '验证码已过期，请重新获取!')
+        showToast(toast, 'error', '错误', '验证码已过期，请重新获取!')
         break
       default:
-        showToast('error', '错误', `未知错误，错误码: ${regData.error}`)
+        showToast(toast, 'error', '错误', `未知错误，错误码: ${regData.error}`)
         break
     }
 
