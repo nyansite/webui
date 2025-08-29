@@ -1,7 +1,7 @@
 {
   "name": "logic",
   "type": "module",
-  "packageManager": "pnpm@10.14.0",
+  "packageManager": "pnpm@10.15.0",
   "author": "Vincent-the-gamer",
   "license": "MIT",
   "scripts": {
@@ -12,8 +12,8 @@
     "axios": "^1.11.0"
   },
   "devDependencies": {
-    "@types/node": "^24.2.0",
-    "tsx": "^4.20.3",
+    "@types/node": "^24.3.0",
+    "tsx": "^4.20.5",
     "vitest": "^3.2.4"
   }
 }

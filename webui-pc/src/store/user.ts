@@ -5,7 +5,7 @@ export const useUserStore = defineStore('user', {
     id: '',  // 用户id, 空表示未登录
     username: '', // 用户账户
     name: '',  // 用户昵称
-    gender: -1, // 用户性别 
+    gender: '', // 用户性别
     mail: '',  // 用户邮箱
     level: -1, // 用户等级
     avatar: '', // 用户头像文件
@@ -33,7 +33,7 @@ export const useUserStore = defineStore('user', {
       this.id = ''
       this.username = ''
       this.name = ''
-      this.gender = -1
+      this.gender = ''
       this.mail = ''
       this.level = -1
       this.avatar = ''

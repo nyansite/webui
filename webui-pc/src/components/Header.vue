@@ -25,7 +25,7 @@ const loginPopupMenu = ref<Record<string, any>[]>([
     label: '个人中心',
     icon: 'i-carbon-user',
     command: () => {
-      router.push('/user')
+      router.push('/profile')
     },
   },
   {
