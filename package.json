@@ -1,7 +1,7 @@
 {
   "name": "@nyansite/webui",
   "version": "0.1.0",
-  "packageManager": "pnpm@10.14.0",
+  "packageManager": "pnpm@10.18.3",
   "description": "喵站PC Web前端 + 移动端Web",
   "author": "Vincent-the-gamer",
   "license": "MIT",
@@ -14,9 +14,9 @@
     "dep": "taze major -r -I"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^5.1.0",
-    "eslint": "^9.32.0",
-    "eslint-plugin-format": "^1.0.1",
-    "taze": "^19.1.0"
+    "@antfu/eslint-config": "^6.0.0",
+    "eslint": "^9.38.0",
+    "eslint-plugin-format": "^1.0.2",
+    "taze": "^19.8.0"
   }
 }
