@@ -1,8 +1,11 @@
 import type { AxiosRequestConfig } from 'axios'
 import axios from 'axios'
 
+const debugBaseUrl: string = 'http://localhost:8080/api'
+const prodBaseUrl: string = 'https://ai-geek.top/api'
+
 export const customAxios = axios.create({
-  baseURL: 'https://ai-geek.top/api',
+  baseURL: prodBaseUrl,
   headers: {
     'Accept': '*/*',
     'Content-Type': 'application/x-www-form-urlencoded',
