@@ -22,7 +22,6 @@ export async function getVerifyCode(email: string) {
   return await post('/user/request-email-code', { email })
 }
 
-
 // 注册用户
 export interface RegisterUserParams {
   username?: string
@@ -38,7 +37,7 @@ export async function registerUser(params: RegisterUserParams) {
     username,
     password,
     mail,
-    code
+    code,
   })
 
   return result
@@ -54,13 +53,18 @@ export interface LoginParams {
 export async function userLogin(params: LoginParams) {
   const { username, password, email } = params
 
-  const result = await post('/user/login', {
-    username,
-    password,
-    email
-  })
+  try {
+    const result = await post('/user/login', {
+      username,
+      password,
+      email,
+    })
 
-  return result
+    return result
+  }
+  catch (error) {
+    return Promise.reject(error)
+  }
 }
 
 // 获取已登录用户自身的信息
